@@ -1,129 +1,97 @@
-// import React, { useEffect, useState } from "react";
-// import { Link, useNavigate, useParams } from "react-router-dom";
-// import Divider from '@mui/material/Divider';
-// import IconButton from '@mui/material/IconButton';
-// import InputBase from '@mui/material/InputBase';
-// import Paper from '@mui/material/Paper';
-// import SearchIcon from '@mui/icons-material/Search';
-// import Stack from '@mui/material/Stack';
-// import Typography from '@mui/material/Typography';
-// import YouTubeIcon from '@mui/icons-material/YouTube';
-
-// export default function SearchHeader() {
-//   const { keyword } = useParams();
-//   const navigate = useNavigate();
-//   const [text, setText] = useState('');
-//   const handleSubmit = e => {
-//     e.preventDefault();
-//     navigate(`/videos/${text}`);
-//   }
-//   useEffect(() => {
-//     setText(keyword || '');
-//   }, [keyword]);
-
-//   return (
-//     <Stack direction={'row'} sx={{alignItems: 'center'}}>
-//       <Link to='/' style={{ textDecoration: 'none' }}>            {/* style={{ textDecoration: 'none' }}, 글자 밑에 밑줄 없애는 코드  */}
-//         <Stack direction={'row'} spacing={1}>
-//           <YouTubeIcon color='error' fontSize="large" />
-//           <Typography variant="h5" color='error' sx={{fontWeight: 'bold'}}>Youtube</Typography>
-//         </Stack>
-//       </Link>
-//       <Paper
-//         component="form" onClick={handleSubmit}
-//         sx={{ p:'2px 4px', display:'flex', alignItems:'center', width:400, marginLeft:15 }}
-//       >
-//         <InputBase
-//           sx={{ ml: 1, flex: 1 }}
-//           placeholder="검색..."
-//           value={text}
-//           onChange={e => setText(e.target.value)}
-//         />
-//         <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-//         <IconButton type="button" sx={{ p: 1 }} aria-label="search">
-//           <SearchIcon />
-//         </IconButton>
-//       </Paper>
-//     </Stack>
-//   )
-// }
-
-
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
+import Grid from '@mui/material/Grid';
 import InputBase from '@mui/material/InputBase';
 import Paper from '@mui/material/Paper';
 import SearchIcon from '@mui/icons-material/Search';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import Avatar from '@mui/material/Avatar';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import HomeIcon from '@mui/icons-material/Home';
 
 export default function SearchHeader() {
   const { keyword } = useParams();
   const navigate = useNavigate();
   const [text, setText] = useState('');
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
   const handleSubmit = e => {
     e.preventDefault();
     navigate(`/videos/${text}`);
-  }
+  };
+
   useEffect(() => {
     setText(keyword || '');
   }, [keyword]);
 
   return (
-    <AppBar position="static">
-      <Container>
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Link to='/' style={{ textDecoration: 'none' }}>
+    <header>
+      <Stack direction={'row'} sx={{alignItems: 'center'}}>
+        <Grid container>
+          <Grid item xs={3}>
             <Stack direction={'row'} spacing={1} alignItems="center">
-              <YouTubeIcon color='error' fontSize="large" />
-              <Typography variant="h5" color='error' sx={{fontWeight: 'bold'}}>YouTube</Typography>
+              <IconButton onClick={handleDrawerToggle}>
+                <MenuIcon sx={{ color: '#212121', fontSize: 'large' }} />
+              </IconButton>
+              <YouTubeIcon sx={{ color: '#FF0000', fontSize: 'large' }} />
+              <Typography variant="h6" sx={{fontWeight: 'bold', color: 'black', letterSpacing: '-0.5px'}}>Youtube</Typography>
             </Stack>
-          </Link>
-          <Paper
-            component="form" onClick={handleSubmit}
-            sx={{ p:'2px 4px', display:'flex', alignItems:'center', flex: 1, marginLeft:15 }}
-          >
-            <InputBase
-              sx={{ ml: 1, flex: 1 }}
-              placeholder="검색..."
-              value={text}
-              onChange={e => setText(e.target.value)}
-            />
-            <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-            <IconButton type="button" sx={{ p: 1 }} aria-label="search">
-              <SearchIcon />
-            </IconButton>
-          </Paper>
-          <IconButton
-            size="large"
-            edge="end"
-            color="inherit"
-            aria-label="menu"
-            sx={{ ml: 2 }}
-          >
-            <NotificationsIcon />
-          </IconButton>
-          <Avatar alt="User Avatar" src="/path/to/avatar.jpg" sx={{ ml: 2 }} />
-        </Toolbar>
-      </Container>
-    </AppBar>
+          </Grid>
+          <Grid item xs={6}>
+            <Paper
+              component="form" onSubmit={handleSubmit}
+              sx={{ p:'2px 4px', display:'flex', alignItems:'center', width:'100%' }}
+            >
+              <InputBase
+                sx={{ ml: 1, flex: 1 }}
+                placeholder="검색..."
+                value={text} 
+                onChange={e => setText(e.target.value)}
+              />
+              <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+              <IconButton type="button" sx={{ p: 1 }} aria-label="search" onClick={handleSubmit}>
+                <SearchIcon />
+              </IconButton>
+            </Paper>
+          </Grid>
+          <Grid item xs={3}></Grid>
+        </Grid>
+      </Stack>
+      <Divider sx={{my: 1}} />
+      <Drawer
+        open={drawerOpen}
+        onClose={handleDrawerToggle}
+      >
+        <List>   {/*  사이드바 아이콘 부분      */}
+          <ListItem button component={Link} to="/">
+            <ListItemIcon>
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText>
+            <Stack direction={'row'} spacing={1} alignItems="center">
+              <IconButton onClick={handleDrawerToggle}>
+                <MenuIcon sx={{ color: '#212121', fontSize: 'large' }} />
+              </IconButton>
+              <YouTubeIcon sx={{ color: '#FF0000', fontSize: 'large' }} />
+              <Typography variant="h6" sx={{fontWeight: 'bold', color: 'black', letterSpacing: '-0.5px'}}>Youtube</Typography>
+            </Stack>
+              </ListItemText>
+          </ListItem>
+          {/* Add more list items as needed */}
+        </List>
+      </Drawer>
+    </header>
   )
 }
