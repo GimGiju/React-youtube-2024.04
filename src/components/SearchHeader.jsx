@@ -16,6 +16,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import HomeIcon from '@mui/icons-material/Home';
+import { useAuthContext } from "../context/AuthContext";
 
 export default function SearchHeader() {
   const { keyword } = useParams();
@@ -35,6 +36,7 @@ export default function SearchHeader() {
   useEffect(() => {
     setText(keyword || '');
   }, [keyword]);
+  const {user, logout} = useAuthContext();
 
   return (
     <header>
@@ -66,7 +68,15 @@ export default function SearchHeader() {
               </IconButton>
             </Paper>
           </Grid>
-          <Grid item xs={3}></Grid>
+          <Grid item xs={3}>
+            <Stack direction='row' spacing={1} justifyContent='right' alignItems='center'>
+              {user &&<Link to='/videos/record'>시청기록</Link>}
+              {user && user.photoURL &&( <img src={user.photoURL} alt={user.displayName} height='32' style={{borderRadius: 100}}/>)} 
+              {user && <p>{user.displayName}</p>}
+              {user && <button onClick={logout}>로그아웃</button>}
+              {!user && <Link to='/SignIn'>로그인</Link>}
+            </Stack>
+          </Grid>
         </Grid>
       </Stack>
       <Divider sx={{my: 1}} />
